@@ -1,5 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/Services/auth.service';
+import { JarwisService } from 'src/app/Services/jarwis.service';
+import { TokenService } from 'src/app/Services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -12,20 +16,28 @@ export class LoginComponent implements OnInit {
     email:null,
     password: null
   };
-  private apiUrl = "http://127.0.0.1:8000/api";
   public error = null;
 
-  constructor(private http:HttpClient) { }
+  constructor(private jarwis:JarwisService,
+              private token:TokenService,
+              private router:Router,
+              private auth:AuthService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(){
-    return this.http.post(`${this.apiUrl}/login`,this.form)
+    return this.jarwis.login(this.form)
             .subscribe(
-              data => console.log(data),
+              data => this.handleResponse(data),
               error => this.handleError(error)
             );
+  }
+
+  handleResponse(data){
+    this.token.handle(data.access_token);
+    this.auth.changeAuthStatus(true);
+    this.router.navigateByUrl('/profile');
   }
 
   handleError(error){
