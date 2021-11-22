@@ -17,7 +17,12 @@ export class SignupComponent implements OnInit {
     password: null,
     password_confirmation: null
   };
-  public error = [];
+  public error = {
+    name:null,
+    email:null,
+    password:null,
+    password_confirmation: null
+  };
 
   constructor(private jarwis:JarwisService,
               private token:TokenService,
