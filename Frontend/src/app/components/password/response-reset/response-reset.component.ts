@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { JarwisService } from 'src/app/Services/jarwis.service';
 
 @Component({
   selector: 'app-response-reset',
@@ -7,9 +9,40 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResponseResetComponent implements OnInit {
 
-  constructor() { }
+  public form = {
+    email: null,
+    password: null,
+    password_confirmation:null,
+    resetToken: null
+  };
+
+  public error = [];
+
+  constructor(private route:ActivatedRoute,
+              private jarwis:JarwisService,
+              private router:Router) {
+    route.queryParams.subscribe(params => {
+      this.form.resetToken = params['token'];
+    });
+  }
 
   ngOnInit(): void {
   }
+
+  onSubmit(){
+    this.jarwis.changePassword(this.form).subscribe(
+      data => this.handleResponse(data),
+      error => this.handleError(error)
+    );
+  }
+
+  handleResponse(data){
+    this.router.navigateByUrl('/login');
+  }
+
+  handleError(error){
+
+  }
+
 
 }

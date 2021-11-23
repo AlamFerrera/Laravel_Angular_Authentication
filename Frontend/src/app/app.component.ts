@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SnotifyService, SnotifyPosition, SnotifyToastConfig } from 'ng-snotify';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Frontend';
+
+  constructor(private snotifyService: SnotifyService) {}
 }

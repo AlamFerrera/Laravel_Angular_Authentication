@@ -14,6 +14,7 @@ import { ResponseResetComponent } from './components/password/response-reset/res
 
 import { JarwisService } from './Services/jarwis.service';
 import { TokenService } from './Services/token.service';
+import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
 
 @NgModule({
   declarations: [
@@ -29,9 +30,15 @@ import { TokenService } from './Services/token.service';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    SnotifyModule
   ],
-  providers: [JarwisService, TokenService],
+  providers: [
+    JarwisService,
+    TokenService,
+    {provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    SnotifyService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
