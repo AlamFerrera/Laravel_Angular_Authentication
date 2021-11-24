@@ -13,6 +13,8 @@ export class RequestResetComponent implements OnInit {
     email: null,
   };
 
+  public error = null;
+
   constructor(private jarwis: JarwisService,
               private notify: SnotifyService) { }
 
@@ -20,15 +22,30 @@ export class RequestResetComponent implements OnInit {
   }
 
   onSubmit(){
+    this.notify.info('Wait...', "Cargando");
     this.jarwis.sendPasswordReset(this.form).subscribe(
-      data => this.handleResponse(data),
-      error => this.notify.error(error.error.error)
+      data => {
+        setTimeout(() => {
+          this.notify.clear();
+          this.handleResponse(data)
+        }, 1000);
+      },
+      error => {
+        setTimeout( () => {
+          this.notify.clear();
+          this.handleError(error);
+        },2000);
+      }
     );
   }
 
   handleResponse(res){
-    console.log(res);
     this.form.email = null;
+    return this.notify.success(res.data);
+  }
+
+  handleError(error){
+    return this.notify.error(error.error.error, "Error");
   }
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SnotifyService } from 'ng-snotify';
 import { JarwisService } from 'src/app/Services/jarwis.service';
 
 @Component({
@@ -16,11 +17,16 @@ export class ResponseResetComponent implements OnInit {
     resetToken: null
   };
 
-  public error = [];
+  public error = {
+    email : null,
+    password: null,
+    password_confirm: null
+  };
 
   constructor(private route:ActivatedRoute,
               private jarwis:JarwisService,
-              private router:Router) {
+              private router:Router,
+              private notify:SnotifyService) {
     route.queryParams.subscribe(params => {
       this.form.resetToken = params['token'];
     });
@@ -37,11 +43,23 @@ export class ResponseResetComponent implements OnInit {
   }
 
   handleResponse(data){
-    this.router.navigateByUrl('/login');
+    let _router = this.router;
+    this.notify.confirm('Listo, Inicia sesion con la nueva password',{
+        buttons:[
+          {
+            text: 'Okay',
+            action: toster => {
+              _router.navigateByUrl('/login'),
+              this.notify.remove(toster.id)
+            }
+          }
+        ]
+      });
+
   }
 
   handleError(error){
-
+    this.error = error.error.errors;
   }
 
 
