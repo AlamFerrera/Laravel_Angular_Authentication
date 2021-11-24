@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SnotifyService } from 'ng-snotify';
+import { SnotifyService, SnotifyPosition } from 'ng-snotify';
 import { JarwisService } from 'src/app/Services/jarwis.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class RequestResetComponent implements OnInit {
   public error = null;
 
   constructor(private jarwis: JarwisService,
-              private notify: SnotifyService) { }
+              private notify: SnotifyService) {}
 
   ngOnInit(): void {
   }
@@ -41,11 +41,11 @@ export class RequestResetComponent implements OnInit {
 
   handleResponse(res){
     this.form.email = null;
-    return this.notify.success(res.data);
+    return this.notify.success(res.data,null,{position: SnotifyPosition.centerTop});
   }
 
   handleError(error){
-    return this.notify.error(error.error.error, "Error");
+    return this.notify.error(error.error.error, "Error",{position: SnotifyPosition.centerTop});
   }
 
 }
